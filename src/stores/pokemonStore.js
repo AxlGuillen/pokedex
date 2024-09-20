@@ -8,7 +8,7 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
   const isLoading = ref(false);
   const error = ref("");
 
-  // Método para obtener los primeros 50 Pokémon
+  // Método para obtener los primeros 20 Pokémon
   async function get20Pokemons() {
     isLoading.value = true;
     error.value = "";
@@ -42,10 +42,35 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
     }
   }
 
+  // Ordenar Pokémon por ID de mayor a menor
+  function sortPokemonByIdDesc() {
+    pokemons.value.sort((a, b) => b.id - a.id);
+  }
+
+  // Ordenar Pokémon por ID de menor a mayor
+  function sortPokemonByIdAsc() {
+    pokemons.value.sort((a, b) => a.id - b.id);
+  }
+
+  // Ordenar Pokémon por nombre de A-Z
+  function sortPokemonByNameAsc() {
+    pokemons.value.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  // Ordenar Pokémon por nombre de Z-A
+  function sortPokemonByNameDesc() {
+    pokemons.value.sort((a, b) => b.name.localeCompare(a.name));
+  }
+
   return {
     pokemons,
     isLoading,
     error,
+
     get20Pokemons,
+    sortPokemonByIdDesc,
+    sortPokemonByIdAsc,
+    sortPokemonByNameAsc,
+    sortPokemonByNameDesc,
   };
 });
