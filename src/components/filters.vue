@@ -27,6 +27,7 @@
 .main-container{
     max-width: 850px;
     margin: 10px auto;
+    margin-bottom: 40px;
 }
 
 .container{
@@ -86,7 +87,7 @@
 }
 
 /* Estilos para pantallas de tablet (768px a 1024px) */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   
     .container{
         flex-direction: column;
@@ -106,7 +107,7 @@
 }
 
 /* Estilos para pantallas de móvil (menor a 768px) */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
     .btn-surprise{
         width: 90%;
     }
