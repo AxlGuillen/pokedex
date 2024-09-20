@@ -1,7 +1,7 @@
 <template>
   <div class="pokemon-card">
     <img :src="pokemon.image" :alt="pokemon.name" class="pokemon-image">
-    <div class="pokemon-info">
+    <div>
       <div class="pokemon-id"># {{ pokemon.id.toString().padStart(3, '0') }}</div>
       <div class="pokemon-name">{{ capitalize(pokemon.name) }}</div>
       <div class="pokemon-types">
@@ -40,16 +40,13 @@ function capitalize(str) {
   background-color: #F2F2F2;
 }
 
-.pokemon-info {
-  margin-top: 10px;
-}
-
 .pokemon-id {
   font-size: 0.8em;
   color: #919191;
 }
 
 .pokemon-name {
+  margin-top: 10px;
   font-size: 1.2em;
   font-weight: bold;
   color: #333;
