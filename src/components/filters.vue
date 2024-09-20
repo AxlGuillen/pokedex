@@ -47,6 +47,11 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
+    cursor: pointer;
+}
+
+.btn-surprise:hover{
+    background-color: #1B82B1;
 }
 
 .select-filter {
@@ -58,6 +63,11 @@
     color: #fff;
     border-radius: 5px;
     border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.select-filter:hover{
+    background-color: #282828;
 }
 
 .select-wrapper {
