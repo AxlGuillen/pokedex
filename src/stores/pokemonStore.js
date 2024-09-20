@@ -27,7 +27,7 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
             id: details.data.id,
             name: details.data.name,
             types: details.data.types.map((typeInfo) => typeInfo.type.name),
-            image: details.data.sprites.front_default,
+            image: details.data.sprites.other["official-artwork"].front_default,
           };
         })
       );
