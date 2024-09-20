@@ -156,6 +156,11 @@ h2 {
         font-size: 17px;
     }
 
+    .shape-container {
+        clip-path: polygon(0 0, 100% 0, 94% 100%, 6% 100%);
+        width: 90%;
+    }
+
     .input-search{
         width: 500px;
     }
@@ -171,10 +176,11 @@ h2 {
 }
 
 /* Estilos para pantallas de móvil (menor a 768px) */
-@media (max-width: 768px) {
+@media (max-width: 760px) {
 
     .header{
         justify-content: left;
+        padding: 10px;
     }
 
     .search-section{
@@ -195,7 +201,7 @@ h2 {
     }
 
     .information{
-        margin-left: -30px;
+        margin-left: -20px;
     }
 
     .shape-container {
