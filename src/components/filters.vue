@@ -1,4 +1,29 @@
 <script setup>
+import { ref } from 'vue';
+import { usePokemonStore } from '../stores/pokemonStore';
+
+const pokemonStore = usePokemonStore();
+const selectedOption = ref('');
+
+const handleSortChange = () => {
+  switch (selectedOption.value) {
+    case 'Lowest Number (first)':
+      pokemonStore.sortPokemonByIdAsc();
+      break;
+    case 'Highest Number (last)':
+      pokemonStore.sortPokemonByIdDesc();
+      break;
+    case 'A-Z':
+      pokemonStore.sortPokemonByNameAsc();
+      break;
+    case 'Z-A':
+      pokemonStore.sortPokemonByNameDesc();
+      break;
+    default:
+      break;
+  }
+};
+
 </script>
 
 <template>
@@ -10,7 +35,7 @@
             </button>
             <div class="select-wrapper">
                 <img src="../assets/pokeball.png" alt="icon" class="select-icon" />
-                <select class="select-filter">
+                <select v-model="selectedOption" class="select-filter" @change="handleSortChange">
                     <option disabled selected>Sort results by</option>
                     <option>Lowest Number (first)</option>
                     <option>Highest Number (last)</option>
