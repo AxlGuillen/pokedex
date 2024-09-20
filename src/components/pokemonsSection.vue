@@ -1,13 +1,29 @@
 <script setup>
+import { ref, computed } from 'vue';
 import { usePokemonStore } from '../stores/pokemonStore';
 import PokemonCard from './card.vue';
 
 const pokemonStore = usePokemonStore();
+
+const limitPokemons = ref(12);
+
+const limitedPokemons = computed(() => {
+  return pokemonStore.pokemons.slice(0, limitPokemons.value);
+});
+
+const loadMorePokemons = () => {
+    limitPokemons.value += 4;
+}
 </script>
 
 <template>
     <div class="pokemon-grid">
-      <PokemonCard v-for="pokemon in pokemonStore.pokemons" :key="pokemon.id" :pokemon="pokemon" />
+      <PokemonCard v-for="pokemon in limitedPokemons" :key="pokemon.id" :pokemon="pokemon" />
+    </div>
+    <div class="btn-container">
+        <button @click="loadMorePokemons" class="btn-surprise">
+            Load more Pokémons
+        </button>
     </div>
 </template>
 
@@ -19,6 +35,26 @@ const pokemonStore = usePokemonStore();
   margin: auto;
   max-width: 850px;
   gap: 10px;
+}
+
+.btn-container{
+    display: flex;
+}
+
+.btn-surprise{
+    background-color: #30A7D7;
+    border: none;
+    margin: auto;
+    margin-top: 40px;
+    padding: 10px 20px;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-surprise:hover{
+    background-color: #1B82B1;
 }
 
 @media (max-width: 1024px) { /* Tablets y dispositivos menores */
