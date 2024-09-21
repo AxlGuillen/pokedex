@@ -5,13 +5,16 @@
       <div class="pokemon-id"># {{ pokemon.id.toString().padStart(3, '0') }}</div>
       <div class="pokemon-name">{{ capitalize(pokemon.name) }}</div>
       <div class="pokemon-types">
-        <span v-for="type in pokemon.types" :key="type" class="pokemon-type">{{ type }}</span>
+        <Categories :types="pokemon.types" />
+        <!-- <span v-for="type in pokemon.types" :key="type" class="pokemon-type">{{ type }}</span> -->
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import Categories from './categories.vue';
+
 defineProps({
   pokemon: {
     type: Object,
