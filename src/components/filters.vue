@@ -24,12 +24,18 @@ const handleSortChange = () => {
   }
 };
 
+const handleRandomPokemons = () => {
+    console.log('Vamos a generar los randoms');
+    
+    pokemonStore.getRandomPokemons();
+};
+
 </script>
 
 <template>
     <div class="main-container">
         <div class="container">
-            <button class="btn-surprise">
+            <button class="btn-surprise" @click="handleRandomPokemons">
                 <img src="../assets/refresh.png" alt="icon" class="icon" />
                 Surprise Me!
             </button>
