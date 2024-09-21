@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { usePokemonStore } from '../stores/pokemonStore';
 
 const pokemonStore = usePokemonStore();
-const selectedOption = ref('');
+const selectedOption = ref('Sort results by');
 
 const handleSortChange = () => {
   switch (selectedOption.value) {
