@@ -1,30 +1,37 @@
 <template>
-  <div class="pokemon-card">
+  <div @click="goToDetails" class="pokemon-card">
     <img :src="pokemon.image" :alt="pokemon.name" class="pokemon-image">
     <div>
       <div class="pokemon-id"># {{ pokemon.id.toString().padStart(3, '0') }}</div>
       <div class="pokemon-name">{{ capitalize(pokemon.name) }}</div>
       <div class="pokemon-types">
         <Categories :types="pokemon.types" />
-        <!-- <span v-for="type in pokemon.types" :key="type" class="pokemon-type">{{ type }}</span> -->
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
 import Categories from './categories.vue';
 
-defineProps({
+const props = defineProps({
   pokemon: {
     type: Object,
     required: true
   }
 });
 
+const router = useRouter();
+
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+function goToDetails() {
+  router.push({ name: 'details', params: { id: props.pokemon.id } });
+}
+
 </script>
 
 <style scoped>
