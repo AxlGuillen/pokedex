@@ -1,16 +1,26 @@
 <script setup>
+import { ref } from 'vue';
+import { usePokemonStore } from '../stores/pokemonStore';
 import AngleDowm from '../assets/svg/angle-dowm.vue';
 import SearchIcon from '../assets/svg/searchIcon.vue';
+
+const pokemonStore = usePokemonStore();
+
+const pokemonToSearch = ref('')
+
+const handleSearchPokemon = () => {
+    pokemonStore.searchPokemonByNameOrId(pokemonToSearch.value);
+}
 </script>
 
 <template>
     <div class="main-container">
         <div class="header">
             <div class="search-section">
-               <h2>Name or Number</h2> 
+               <h2>Name or Number</h2>
                <div class="search-container">
-                    <input type="text" class="input-search">          
-                    <button class="button-search">
+                    <input v-model="pokemonToSearch" type="text" class="input-search">          
+                    <button  @click="handleSearchPokemon" class="button-search">
                         <SearchIcon />
                     </button>
                </div>

@@ -77,6 +77,29 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
     }
   }
 
+  async function searchPokemonByNameOrId(searchTerm) {
+    isLoading.value = true;
+    error.value = "";
+    try {
+      const response = await axios.get(
+        `https://pokeapi.co/api/v2/pokemon/${searchTerm.toLowerCase()}`
+      );
+      pokemons.value = [
+        {
+          id: response.data.id,
+          name: response.data.name,
+          types: response.data.types.map((type) => type.type.name),
+          image: response.data.sprites.other["official-artwork"].front_default,
+        },
+      ];
+    } catch (err) {
+      error.value = `Error al obtener el Pokémon: ${err.message}`;
+      console.error(err);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   // Ordenar Pokémon por ID de mayor a menor
   function sortPokemonByIdDesc() {
     pokemons.value.sort((a, b) => b.id - a.id);
@@ -104,6 +127,7 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
 
     get20Pokemons,
     getRandomPokemons,
+    searchPokemonByNameOrId,
     sortPokemonByIdDesc,
     sortPokemonByIdAsc,
     sortPokemonByNameAsc,
