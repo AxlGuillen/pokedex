@@ -132,6 +132,9 @@ const capitalizeName = (name) => {
         display: none;
     }
 
+    h1{
+        font-size: 22px;
+    }
 }
 
 </style>
