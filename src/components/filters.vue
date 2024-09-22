@@ -57,8 +57,7 @@ const handleRandomPokemons = () => {
 
 .main-container{
     max-width: 850px;
-    margin: 10px auto;
-    margin-bottom: 40px;
+    margin: 40px auto;
 }
 
 .container{
