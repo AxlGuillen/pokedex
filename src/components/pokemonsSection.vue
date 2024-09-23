@@ -44,8 +44,7 @@ const loadMorePokemons = () => {
 .btn-surprise{
     background-color: #30A7D7;
     border: none;
-    margin: auto;
-    margin-top: 40px;
+    margin: 40px auto;
     padding: 10px 20px;
     color: #fff;
     border-radius: 5px;
