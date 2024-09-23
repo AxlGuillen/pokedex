@@ -60,6 +60,7 @@ const capitalizeName = (name) => {
     justify-content: space-between;
     height: fit-content;
     gap: 5px;
+    background-color: #fff;
 }
 
 .left{

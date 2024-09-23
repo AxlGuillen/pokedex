@@ -25,7 +25,7 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
     try {
       const response = await axios.get("https://pokeapi.co/api/v2/pokemon", {
         params: {
-          limit: 20,
+          limit: 100,
           offset: 0,
         },
       });
@@ -43,7 +43,6 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
       );
 
       pokemons.value = pokemonData;
-      console.log(pokemons.value);
     } catch (err) {
       error.value = "Error al obtener los Pokémon";
       console.error(err);
@@ -78,7 +77,6 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
 
       // Desordenar el array de Pokémon
       pokemons.value = pokemonData.sort(() => 0.5 - Math.random());
-      console.log(pokemons.value);
     } catch (err) {
       error.value = "Error al obtener los Pokémon";
       console.error(err);
@@ -130,6 +128,10 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
         ),
         image: response.data.sprites.other["official-artwork"].front_default,
       };
+
+      pokemonDetails.value.weaknesses = await getPokemonWeaknesses(
+        pokemonDetails.value.types
+      );
     } catch (err) {
       error.value = `Error al obtener los detalles del Pokémon: ${err.message}`;
       console.error(err);
@@ -138,22 +140,37 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
     }
   }
 
-  // Método para obtener información de la especie (sexo, categoría)
+  // Método para obtener información de la especie (sexo, categoría, y descripciones específicas)
   async function getPokemonSpecies(id) {
+    isLoading.value = true;
     try {
       const response = await axios.get(
         `https://pokeapi.co/api/v2/pokemon-species/${id}`
       );
+      const descriptions = response.data.flavor_text_entries
+        .filter(
+          (entry) =>
+            entry.language.name === "en" &&
+            (entry.version.name === "red" || entry.version.name === "blue")
+        )
+        .map((entry) => ({
+          version: entry.version.name,
+          text: entry.flavor_text.replace(/[\n\f]/g, " "),
+        }));
+
       pokemonSpecies.value = {
         gender_rate: response.data.gender_rate,
         category: response.data.genera.find(
           (genus) => genus.language.name === "en"
         ).genus,
         evolution_chain: response.data.evolution_chain.url,
+        descriptions: descriptions,
       };
     } catch (err) {
       error.value = `Error al obtener los detalles de la especie: ${err.message}`;
       console.error(err);
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -165,6 +182,40 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
     } catch (err) {
       error.value = `Error al obtener la cadena de evolución: ${err.message}`;
       console.error(err);
+    }
+  }
+
+  async function getPokemonWeaknesses(types) {
+    isLoading.value = true;
+    error.value = "";
+
+    console.log(types);
+
+    try {
+      const weaknesses = new Set();
+
+      for (const type of types) {
+        const response = await axios.get(
+          `https://pokeapi.co/api/v2/type/${type}`
+        );
+
+        // Agregar todas las debilidades del tipo actual al conjunto de debilidades
+        response.data.damage_relations.double_damage_from.forEach(
+          (weakness) => {
+            weaknesses.add(weakness.name);
+          }
+        );
+      }
+
+      console.log(weaknesses);
+
+      return Array.from(weaknesses); // Convertir el conjunto en un array
+    } catch (err) {
+      error.value = `Error al obtener las debilidades: ${err.message}`;
+      console.error(err);
+      return [];
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -251,6 +302,7 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
     pokemonDetails,
     pokemonSpecies,
     pokemonEvolution,
+    getPokemonWeaknesses,
     previousPokemon,
     nextPokemon,
     getPokemonFullDetails,
