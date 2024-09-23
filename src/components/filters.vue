@@ -40,7 +40,7 @@ const handleRandomPokemons = () => {
                 Surprise Me!
             </button>
             <div class="select-wrapper">
-                <img src="../assets/pokeball.png" alt="icon" class="select-icon" />
+                <img src="../assets/white-pokeball.png" alt="icon" class="select-icon" />
                 <select v-model="selectedOption" class="select-filter" @change="handleSortChange">
                     <option disabled selected>Sort results by</option>
                     <option>Lowest Number (first)</option>
@@ -108,11 +108,11 @@ const handleRandomPokemons = () => {
 
 .select-icon {
     position: absolute;
-    left: 10px;
+    left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     pointer-events: none;
 }
 
