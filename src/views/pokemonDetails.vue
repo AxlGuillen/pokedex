@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router';
 import { usePokemonStore } from '../stores/pokemonStore';
 import HeaderDetails from '../components/details/headerDetails.vue';
 import StatsSectionDetails from '../components/details/statsSectionDetails.vue';
+import EvolutionsSection from '../components/details/evolutionsSection.vue';
 
 const route = useRoute();
 const pokemonStore = usePokemonStore();
@@ -19,6 +20,7 @@ onMounted(() => {
     <div class="bg">
         <HeaderDetails />
         <StatsSectionDetails />
+        <EvolutionsSection />
     </div>
 </template>
 
