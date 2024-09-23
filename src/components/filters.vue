@@ -25,8 +25,6 @@ const handleSortChange = () => {
 };
 
 const handleRandomPokemons = () => {
-    console.log('Vamos a generar los randoms');
-    
     pokemonStore.getRandomPokemons();
 };
 
