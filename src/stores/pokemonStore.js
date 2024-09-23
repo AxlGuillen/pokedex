@@ -19,7 +19,7 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
   const error = ref("");
 
   // Método para obtener los primeros 20 Pokémon
-  async function get20Pokemons() {
+  async function getPokemons() {
     isLoading.value = true;
     error.value = "";
     try {
@@ -178,7 +178,30 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
   async function getPokemonEvolution(chainUrl) {
     try {
       const response = await axios.get(chainUrl);
-      pokemonEvolution.value = response.data.chain; // Cadena de evoluciones
+      let evolutions = [];
+      let currentEvolution = response.data.chain;
+
+      // Recorrer toda la cadena de evolución
+      do {
+        const speciesUrl = currentEvolution.species.url;
+        const pokemonId = speciesUrl.split("/").filter(Boolean).pop(); // Extraer el ID del Pokémon de la URL de la especie
+        const pokemonDetails = await axios.get(
+          `https://pokeapi.co/api/v2/pokemon/${pokemonId}`
+        );
+
+        evolutions.push({
+          id: pokemonDetails.data.id,
+          name: currentEvolution.species.name,
+          types: pokemonDetails.data.types.map((type) => type.type.name),
+          image:
+            pokemonDetails.data.sprites.other["official-artwork"].front_default,
+        });
+
+        currentEvolution = currentEvolution.evolves_to[0];
+      } while (currentEvolution);
+
+      pokemonEvolution.value = evolutions;
+      console.log(pokemonEvolution.value);
     } catch (err) {
       error.value = `Error al obtener la cadena de evolución: ${err.message}`;
       console.error(err);
@@ -188,8 +211,6 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
   async function getPokemonWeaknesses(types) {
     isLoading.value = true;
     error.value = "";
-
-    console.log(types);
 
     try {
       const weaknesses = new Set();
@@ -206,8 +227,6 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
           }
         );
       }
-
-      console.log(weaknesses);
 
       return Array.from(weaknesses); // Convertir el conjunto en un array
     } catch (err) {
@@ -295,7 +314,7 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
     isLoading,
     error,
 
-    get20Pokemons,
+    getPokemons,
     getRandomPokemons,
     searchPokemonByNameOrId,
 
