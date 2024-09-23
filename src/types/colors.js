@@ -6,7 +6,7 @@ export const typesColors = {
   ghost: "#7B62A3", // Fantasma
   ground: ["#F7DE3F", "#AB9842"], // Tierra
   normal: "#A4ACAF", // Normal
-  psychic: "#F2F2F2", // Psíquico
+  psychic: "#F366B9", // Psíquico
   steel: "#9EB7B8", // Acero
   dark: "#707070", // Siniestro
   electric: "#EED535", // Eléctrico
