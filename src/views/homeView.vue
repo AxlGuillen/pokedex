@@ -10,8 +10,7 @@ import PokemonsSection from '../components/pokemonsSection.vue';
 const pokemonStore = usePokemonStore();
 
 onMounted(() => {
-  pokemonStore.get20Pokemons();
-  
+  pokemonStore.getPokemons();
 });
 </script>
 
