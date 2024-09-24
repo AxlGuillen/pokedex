@@ -4,12 +4,12 @@ import PokemonDetails from "../views/pokemonDetails.vue";
 
 const routes = [
   {
-    path: "/",
+    path: "/pokedex",
     name: "Home",
     component: Home,
   },
   {
-    path: "/pokemon/details/:id",
+    path: "/pokedex/details/:id",
     name: "details",
     component: PokemonDetails,
     props: true,
