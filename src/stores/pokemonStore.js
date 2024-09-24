@@ -12,8 +12,8 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
   const previousPokemon = ref({});
   const nextPokemon = ref({});
 
-  const MAX_POKEMON_ID = 1025; // Límite superior de Pokémon en la API
-  const MIN_POKEMON_ID = 1; // Límite inferior de Pokémon en la API
+  const MAX_POKEMON_ID = 1025;
+  const MIN_POKEMON_ID = 1;
 
   const isLoading = ref(false);
   const error = ref("");
