@@ -12,7 +12,7 @@ const limitedPokemons = computed(() => {
 });
 
 const loadMorePokemons = () => {
-    limitPokemons.value += 4;
+    limitPokemons.value += 12;
 }
 </script>
 
