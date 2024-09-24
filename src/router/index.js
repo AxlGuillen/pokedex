@@ -4,7 +4,7 @@ import PokemonDetails from "../views/pokemonDetails.vue";
 
 const routes = [
   {
-    path: "/pokedex",
+    path: "/",
     name: "Home",
     component: Home,
   },
