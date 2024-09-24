@@ -2,6 +2,7 @@
 import { ref, computed} from 'vue';
 import { usePokemonStore } from '../../stores/pokemonStore';
 import Categories from '../categories-bigVersion.vue';
+import StatsChart from './statsChart.vue';
 
 const pokemonStore = usePokemonStore();
 const selectedVersion = ref('blue');
@@ -43,11 +44,11 @@ const pokemonAbilities = computed(() => {
 <template>
     <div class="main-container">
         <div class="left-section">
-            <img :src="pokemonStore.pokemonDetails.image" :alt="pokemonStore.pokemonDetails.name" class="pokemon-image">
-
             <div>
-                <h1>Poderosisima grafica</h1>
+                <img :src="pokemonStore.pokemonDetails.image" :alt="pokemonStore.pokemonDetails.name" class="pokemon-image">
             </div>
+
+            <StatsChart class="chart-section" />
         </div>
         <div class="right-section">
             <p>{{ descriptionText }}</p>
@@ -127,7 +128,8 @@ const pokemonAbilities = computed(() => {
 }
 
 .left-section{
-    padding: 10px;
+    display: flex;
+    flex-direction: column;
 }
 .right-section{
     display: flex;
@@ -136,11 +138,13 @@ const pokemonAbilities = computed(() => {
     gap: 30px;
     font-size: x-large;
 }
+
 .pokemon-image{
     background-color: #F2F2F2;
     border-radius: 5px;
     width: 100%;
 }
+
 .versions{
     display: flex;
     flex-wrap: nowrap;
