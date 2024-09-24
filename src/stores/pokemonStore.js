@@ -25,7 +25,7 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
     try {
       const response = await axios.get("https://pokeapi.co/api/v2/pokemon", {
         params: {
-          limit: 100,
+          limit: 1025,
           offset: 0,
         },
       });
@@ -51,38 +51,22 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
     }
   }
 
-  async function getRandomPokemons() {
-    const offset = Math.floor(Math.random() * 800); // Offset aleatorio entre 0 y 800
-    isLoading.value = true;
-    error.value = "";
-    try {
-      const response = await axios.get("https://pokeapi.co/api/v2/pokemon", {
-        params: {
-          limit: 30,
-          offset: offset,
-        },
-      });
-
-      const pokemonData = await Promise.all(
-        response.data.results.map(async (pokemon) => {
-          const details = await axios.get(pokemon.url);
-          return {
-            id: details.data.id,
-            name: details.data.name,
-            types: details.data.types.map((typeInfo) => typeInfo.type.name),
-            image: details.data.sprites.other["official-artwork"].front_default,
-          };
-        })
-      );
-
-      // Desordenar el array de Pokémon
-      pokemons.value = pokemonData.sort(() => 0.5 - Math.random());
-    } catch (err) {
-      error.value = "Error al obtener los Pokémon";
-      console.error(err);
-    } finally {
-      isLoading.value = false;
+  // Método para obtener Pokémon de manera aleatoria ya cargados en la store
+  function getRandomPokemons() {
+    if (pokemons.value.length > 0) {
+      pokemons.value = shuffleArray(pokemons.value);
+    } else {
+      console.error("No hay Pokémon cargados para desordenar.");
     }
+  }
+
+  // Función para desordenar un array (implementación del algoritmo de Fisher-Yates)
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; // Intercambio de elementos
+    }
+    return array;
   }
 
   async function searchPokemonByNameOrId(searchTerm) {
