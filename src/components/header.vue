@@ -10,6 +10,7 @@ const pokemonToSearch = ref('')
 
 const handleSearchPokemon = () => {
     pokemonStore.searchPokemonByNameOrId(pokemonToSearch.value);
+    pokemonToSearch.value = '';
 }
 </script>
 
@@ -19,7 +20,7 @@ const handleSearchPokemon = () => {
             <div class="search-section">
                <h2>Name or Number</h2>
                <div class="search-container">
-                    <input v-model="pokemonToSearch" type="text" class="input-search">          
+                    <input v-model="pokemonToSearch" @keydown.enter="handleSearchPokemon" type="text" class="input-search">          
                     <button  @click="handleSearchPokemon" class="button-search">
                         <SearchIcon />
                     </button>
