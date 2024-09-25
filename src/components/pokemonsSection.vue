@@ -11,6 +11,10 @@ const limitedPokemons = computed(() => {
   return pokemonStore.pokemons.slice(0, limitPokemons.value);
 });
 
+const isLoadMoreDisabled = computed(() => {
+  return pokemonStore.pokemons.length === 1 || limitPokemons.value >= 1000;
+});
+
 const loadMorePokemons = () => {
     limitPokemons.value += 12;
 }
@@ -21,7 +25,10 @@ const loadMorePokemons = () => {
       <PokemonCard v-for="pokemon in limitedPokemons" :key="pokemon.id" :pokemon="pokemon" />
     </div>
     <div class="btn-container">
-        <button @click="loadMorePokemons" class="btn-surprise">
+        <button @click="loadMorePokemons" 
+                :disabled="isLoadMoreDisabled" 
+                :class="{ 'disabled-btn': isLoadMoreDisabled }" 
+                class="btn-surprise">
             Load more Pokémons
         </button>
     </div>
@@ -54,6 +61,12 @@ const loadMorePokemons = () => {
 
 .btn-surprise:hover{
     background-color: #1B82B1;
+}
+
+.btn-surprise.disabled-btn {
+    background-color: #b0b0b0; /* Color opaco */
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 @media (max-width: 1024px) { /* Tablets y dispositivos menores */
