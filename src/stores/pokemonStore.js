@@ -51,12 +51,15 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
     }
   }
 
-  // Método para obtener Pokémon de manera aleatoria ya cargados en la store
-  function getRandomPokemons() {
-    if (pokemons.value.length > 0) {
+  function resetAndShufflePokemons() {
+    // Si el array ya tiene todos los Pokémon cargados, simplemente los revolvemos
+    if (pokemons.value.length === 1025) {
       pokemons.value = shuffleArray(pokemons.value);
     } else {
-      console.error("No hay Pokémon cargados para desordenar.");
+      // Si no están todos los Pokémon cargados, los obtenemos y luego los revolvemos
+      getPokemons().then(() => {
+        pokemons.value = shuffleArray(pokemons.value);
+      });
     }
   }
 
@@ -76,6 +79,8 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
       const response = await axios.get(
         `https://pokeapi.co/api/v2/pokemon/${searchTerm.toLowerCase()}`
       );
+
+      // Muestra solo el Pokémon encontrado
       pokemons.value = [
         {
           id: response.data.id,
@@ -299,9 +304,9 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
     error,
 
     getPokemons,
-    getRandomPokemons,
     searchPokemonByNameOrId,
 
+    resetAndShufflePokemons,
     pokemonDetails,
     pokemonSpecies,
     pokemonEvolution,

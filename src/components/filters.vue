@@ -25,7 +25,7 @@ const handleSortChange = () => {
 };
 
 const handleRandomPokemons = () => {
-    pokemonStore.getRandomPokemons();
+    pokemonStore.resetAndShufflePokemons();
 };
 
 </script>
