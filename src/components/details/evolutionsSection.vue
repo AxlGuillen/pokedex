@@ -66,6 +66,7 @@ const pokemonsEvolutions = computed(() => {
     background-color: #fff;
     padding: 10px;
     padding-top: 50px;
+    gap: 30px;
 }
 
 .generator-container{
@@ -152,6 +153,17 @@ const pokemonsEvolutions = computed(() => {
   background-color: #da471b;
 }
 
+
+@media (min-width: 1280px) { /* Pantallas XL o más grandes */
+    .evolutions-container{
+        margin: auto;
+        max-width: 70%;
+    }
+    .btn-container{
+        justify-content: center;
+    }
+}
+
 @media (max-width: 769px) {
     .main-container{
         flex-direction: column;
@@ -172,6 +184,12 @@ const pokemonsEvolutions = computed(() => {
       transform: rotate(90deg); /* Rotar la flecha hacia abajo */
       transition: transform 0.3s ease; /* Suavizar la transición */
   }
+}
+
+@media (max-width: 480px) {
+  .main-container{
+        max-width: 90%;
+   }
 }
 
 </style>

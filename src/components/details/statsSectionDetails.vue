@@ -208,6 +208,20 @@ const pokemonAbilities = computed(() => {
     margin-top: 10px;
 }
 
+@media (min-width: 1280px) { /* Pantallas XL o más grandes */
+  
+    .main-container{
+        align-content: center;
+        justify-content: center;
+    }
+    .left-section{
+        max-width: 35%;
+    }
+    .right-section{
+        max-width: 35%;
+    }
+}
+
 @media (max-width: 769px) {
     .main-container{
         flex-direction: column;
