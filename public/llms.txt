@@ -1,0 +1,75 @@
+# Pokedex by Axl Guillen
+
+> A Pokedex SPA built with Vue 3 as a technical interview project for Urvenue. Displays all 1025 Pokemon from the PokeAPI with search, filtering, sorting, and detailed views.
+
+## Summary
+
+This is a clone/recreation of the official Pokedex, built during a job interview challenge. The goal was to demonstrate frontend skills using Vue 3, Pinia, Vue Router, and Axios against a public REST API.
+
+## Live Site
+
+https://axlguillen.github.io/pokedex/
+
+## Source Code
+
+https://github.com/AxlGuillen/pokedex
+
+## Tech Stack
+
+- Vue 3 (Composition API)
+- Pinia (state management)
+- Vue Router (client-side routing, base: /pokedex)
+- Axios (HTTP client)
+- Vite (bundler)
+- PokeAPI (https://pokeapi.co/) — public REST API, no auth required
+
+## Routes
+
+- `/` — Home: full Pokemon list (1025 Pokemon), search, filter by type, sort
+- `/pokedex/details/:id` — Detail view for a single Pokemon
+
+## Features
+
+- Browse all 1025 Pokemon with paginated/load-more display
+- Search by name or ID
+- Filter by Pokemon type (fire, water, grass, etc.)
+- Sort by ID (asc/desc) or name (A-Z / Z-A)
+- Shuffle/randomize the list
+- Detail page: stats, height, weight, abilities, weaknesses, descriptions, evolution chain
+- Navigate to previous/next Pokemon from the detail page
+- Fully responsive (mobile to 4K)
+
+## Data Flow
+
+1. On home load, fetches all 1025 Pokemon from PokeAPI in parallel
+2. Pokemon list is stored in Pinia (`pokemonStore`)
+3. Detail page fetches: pokemon data + species + evolution chain + adjacent Pokemon
+4. Weaknesses are derived from type damage relations
+
+## Project Structure
+
+```
+src/
+├── views/
+│   ├── homeView.vue         # List page
+│   └── pokemonDetails.vue   # Detail page
+├── components/
+│   ├── header.vue
+│   ├── pokemonsSection.vue  # Grid of cards + load more
+│   ├── card.vue             # Single Pokemon card
+│   ├── filters.vue          # Sort controls
+│   ├── categories.vue       # Type filter chips
+│   ├── categories-bigVersion.vue
+│   ├── SpinnerComponent.vue
+│   └── details/             # Sub-components for detail page
+├── stores/
+│   └── pokemonStore.js      # All API calls and state
+├── router/
+│   └── index.js
+└── main.js
+```
+
+## Author
+
+Axl Guillen — frontend developer
+GitHub: https://github.com/AxlGuillen

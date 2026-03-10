@@ -4,7 +4,7 @@ A Pokedex web application built with Vue 3, featuring Pokemon browsing, search, 
 
 ## Live Demo
 
-[https://axl-pokedex.netlify.app](https://axl-pokedex.netlify.app)
+[https://axlguillen.github.io/pokedex/](https://axlguillen.github.io/pokedex/)
 
 ## Features
 
