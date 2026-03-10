@@ -50,7 +50,7 @@ const pokemonsEvolutions = computed(() => {
         </div>
         <div class="btn-container">
             <button  @click="goToHome" class="back-pokedex">
-                Ir a la pokedex
+                Back to Pokédex
             </button>
         </div>
     </div>

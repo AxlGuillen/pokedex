@@ -190,7 +190,6 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
       } while (currentEvolution);
 
       pokemonEvolution.value = evolutions;
-      console.log(pokemonEvolution.value);
     } catch (err) {
       error.value = `Error al obtener la cadena de evolución: ${err.message}`;
       console.error(err);

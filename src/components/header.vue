@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { usePokemonStore } from '../stores/pokemonStore';
-import AngleDowm from '../assets/svg/angle-dowm.vue';
+import AngleDowm from '../assets/svg/angle-down.vue';
 import SearchIcon from '../assets/svg/searchIcon.vue';
 
 const pokemonStore = usePokemonStore();
@@ -39,9 +39,6 @@ const handleSearchPokemon = () => {
             <div class="shape-content">
                 <span>Show Advanced Search</span><AngleDowm />
             </div>
-        </div>
-        <div class="shape-container">
-            
         </div>
     </div>
 </template>
@@ -130,16 +127,6 @@ h2 {
     z-index: 1;
 }
 
-.shape-container {
-  clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
-  background-color: #616161;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  width: 30%;
-  height: 20px;
-  margin: auto;
-}
 
 .shape-content{
     display: flex;
@@ -165,11 +152,6 @@ h2 {
 
     .search-section p {
         font-size: 17px;
-    }
-
-    .shape-container {
-        clip-path: polygon(0 0, 100% 0, 94% 100%, 6% 100%);
-        width: 90%;
     }
 
     .input-search{
@@ -215,9 +197,6 @@ h2 {
         margin-left: -20px;
     }
 
-    .shape-container {
-        width: 80%;
-    }
 }
 
 </style>
