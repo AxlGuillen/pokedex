@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { usePokemonStore } from '../stores/pokemonStore';
 import PokemonCard from './card.vue';
 
@@ -12,12 +12,17 @@ const limitedPokemons = computed(() => {
 });
 
 const isLoadMoreDisabled = computed(() => {
-  return pokemonStore.pokemons.length === 1 || limitPokemons.value >= 1000;
+  return pokemonStore.pokemons.length === 1 || limitPokemons.value >= pokemonStore.pokemons.length;
 });
 
 const loadMorePokemons = () => {
-    limitPokemons.value += 12;
-}
+  limitPokemons.value += 12;
+};
+
+// Resetear el límite al cambiar el orden para no renderizar cientos de cards de golpe
+watch(() => pokemonStore.pokemons, () => {
+  limitPokemons.value = 12;
+});
 </script>
 
 <template>
