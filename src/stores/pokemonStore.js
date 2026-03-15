@@ -2,6 +2,31 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
 
+const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hora
+
+function getFromCache(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const { timestamp, data } = JSON.parse(raw);
+    if (Date.now() - timestamp > CACHE_TTL_MS) {
+      localStorage.removeItem(key);
+      return null;
+    }
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function saveToCache(key, data) {
+  try {
+    localStorage.setItem(key, JSON.stringify({ timestamp: Date.now(), data }));
+  } catch {
+    // localStorage lleno o no disponible — continúa sin caché
+  }
+}
+
 export const usePokemonStore = defineStore("pokemonStore", () => {
   // Variables centralizadas
   const pokemons = ref([]);
@@ -23,6 +48,12 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
     isLoading.value = true;
     error.value = "";
     try {
+      const cached = getFromCache("pokedex_list");
+      if (cached) {
+        pokemons.value = cached;
+        return;
+      }
+
       const response = await axios.get("https://pokeapi.co/api/v2/pokemon", {
         params: {
           limit: 1025,
@@ -42,6 +73,7 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
         })
       );
 
+      saveToCache("pokedex_list", pokemonData);
       pokemons.value = pokemonData;
     } catch (err) {
       error.value = "Error al obtener los Pokémon";
@@ -51,16 +83,14 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
     }
   }
 
-  function resetAndShufflePokemons() {
-    // Si el array ya tiene todos los Pokémon cargados, simplemente los revolvemos
-    if (pokemons.value.length === 1025) {
-      pokemons.value = shuffleArray(pokemons.value);
-    } else {
-      // Si no están todos los Pokémon cargados, los obtenemos y luego los revolvemos
-      getPokemons().then(() => {
-        pokemons.value = shuffleArray(pokemons.value);
-      });
+  async function resetAndShufflePokemons() {
+    if (pokemons.value.length < 1025) {
+      await getPokemons();
     }
+    isLoading.value = true;
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    pokemons.value = shuffleArray([...pokemons.value]);
+    isLoading.value = false;
   }
 
   // Función para desordenar un array (implementación del algoritmo de Fisher-Yates)
@@ -264,11 +294,30 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
   async function getPokemonFullDetails(id) {
     isLoading.value = true;
     try {
+      const cacheKey = `pokedex_details_${id}`;
+      const cached = getFromCache(cacheKey);
+      if (cached) {
+        pokemonDetails.value = cached.details;
+        pokemonSpecies.value = cached.species;
+        pokemonEvolution.value = cached.evolution;
+        previousPokemon.value = cached.previous;
+        nextPokemon.value = cached.next;
+        return;
+      }
+
       await getPokemonDetails(id);
       await getPokemonSpecies(id);
       await getPokemonEvolution(pokemonSpecies.value.evolution_chain);
       await getPreviousPokemon(Number(id));
       await getNextPokemon(Number(id));
+
+      saveToCache(cacheKey, {
+        details: pokemonDetails.value,
+        species: pokemonSpecies.value,
+        evolution: pokemonEvolution.value,
+        previous: previousPokemon.value,
+        next: nextPokemon.value,
+      });
     } catch (err) {
       error.value = `Error al obtener los detalles completos: ${err.message}`;
       console.error(err);
@@ -277,25 +326,17 @@ export const usePokemonStore = defineStore("pokemonStore", () => {
     }
   }
 
-  // Ordenar Pokémon por ID de mayor a menor
-  function sortPokemonByIdDesc() {
-    pokemons.value.sort((a, b) => b.id - a.id);
+  async function sortPokemons(compareFn) {
+    isLoading.value = true;
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    pokemons.value = [...pokemons.value].sort(compareFn);
+    isLoading.value = false;
   }
 
-  // Ordenar Pokémon por ID de menor a mayor
-  function sortPokemonByIdAsc() {
-    pokemons.value.sort((a, b) => a.id - b.id);
-  }
-
-  // Ordenar Pokémon por nombre de A-Z
-  function sortPokemonByNameAsc() {
-    pokemons.value.sort((a, b) => a.name.localeCompare(b.name));
-  }
-
-  // Ordenar Pokémon por nombre de Z-A
-  function sortPokemonByNameDesc() {
-    pokemons.value.sort((a, b) => b.name.localeCompare(a.name));
-  }
+  const sortPokemonByIdDesc  = () => sortPokemons((a, b) => b.id - a.id);
+  const sortPokemonByIdAsc   = () => sortPokemons((a, b) => a.id - b.id);
+  const sortPokemonByNameAsc = () => sortPokemons((a, b) => a.name.localeCompare(b.name));
+  const sortPokemonByNameDesc= () => sortPokemons((a, b) => b.name.localeCompare(a.name));
 
   return {
     pokemons,
