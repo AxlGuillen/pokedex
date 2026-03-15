@@ -13,14 +13,11 @@
 
 <script setup>
 import { typesColors } from '../types/colors';
+import { capitalize } from '../utils/helpers';
 
 defineProps({
   types: Array
 });
-
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-}
 
 function typeStyle(type) {
   const color = typesColors[type];

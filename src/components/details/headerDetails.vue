@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import { usePokemonStore } from '../../stores/pokemonStore';
 import AngleLeft from '../../assets/svg/angle-left.vue';
 import AngleRight from '../../assets/svg/angle-right.vue';
+import { capitalize, formatNumber } from '../../utils/helpers';
 
 const pokemonStore = usePokemonStore();
 const router = useRouter();
@@ -26,13 +27,7 @@ const goToNext = () => {
   }
 };
 
-const formatNumber = (id) => {
-  return id ? id.toString().padStart(4, '0') : '----';
-};
-
-const capitalizeName = (name) => {
-  return name ? name.charAt(0).toUpperCase() + name.slice(1) : 'Unknown';
-};
+const capitalizeName = (name) => name ? capitalize(name) : 'Unknown';
 </script>
 
 <template>

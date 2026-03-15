@@ -4,17 +4,10 @@ import { useRouter } from 'vue-router';
 import { usePokemonStore } from '../../stores/pokemonStore';
 import Categories from '../categories.vue';
 import AngleRight from '../../assets/svg/angle-right.vue';
+import { capitalize, formatNumber } from '../../utils/helpers';
 
 const router = useRouter();
 const pokemonStore = usePokemonStore();
-
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-const formatNumber = (id) => {
-  return id ? id.toString().padStart(4, '0') : '----';
-};
 
 const goToDetails = (id) => {
   pokemonStore.getPokemonFullDetails(id);

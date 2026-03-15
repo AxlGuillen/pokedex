@@ -14,6 +14,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import Categories from './categories.vue';
+import { capitalize } from '../utils/helpers';
 
 const props = defineProps({
   pokemon: {
@@ -23,10 +24,6 @@ const props = defineProps({
 });
 
 const router = useRouter();
-
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
 
 function goToDetails() {
   router.push({ name: 'details', params: { id: props.pokemon.id } });
