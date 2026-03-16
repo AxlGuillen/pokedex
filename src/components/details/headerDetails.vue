@@ -73,6 +73,7 @@ const capitalizeName = (name) => name ? capitalize(name) : 'Unknown';
 
 .left:hover{
     background-color: #30A7D7;
+    cursor: pointer;
 }
 
 .rigth{
@@ -90,6 +91,7 @@ const capitalizeName = (name) => name ? capitalize(name) : 'Unknown';
 
 .rigth:hover{
     background-color: #30A7D7;
+    cursor: pointer;
 }
 
 .number {
