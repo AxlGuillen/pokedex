@@ -97,6 +97,15 @@ const pokemonsEvolutions = computed(() => {
     align-items: center;
     gap: 10px;
     cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.evolution-item:hover{
+    transform: scale(1.08);
+}
+
+.evolution-item:hover img{
+    border-color: #30A7D7;
 }
 
 .evolution-item h1{
