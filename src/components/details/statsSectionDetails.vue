@@ -6,6 +6,50 @@ import StatsChart from './statsChart.vue';
 
 const pokemonStore = usePokemonStore();
 const selectedVersion = ref('blue');
+const showModal = ref(false);
+const thumbRef = ref(null);
+
+const onEnter = (el, done) => {
+  const thumbRect = thumbRef.value.getBoundingClientRect();
+  const img = el.querySelector('.modal-img');
+  const imgRect = img.getBoundingClientRect();
+
+  const scale = thumbRect.width / imgRect.width;
+  const dx = thumbRect.left + thumbRect.width / 2 - (imgRect.left + imgRect.width / 2);
+  const dy = thumbRect.top + thumbRect.height / 2 - (imgRect.top + imgRect.height / 2);
+
+  img.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+  img.style.transformOrigin = 'center';
+  img.style.transition = 'none';
+  el.style.backgroundColor = 'rgba(0,0,0,0)';
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      img.style.transition = 'transform 0.35s ease';
+      el.style.transition = 'background-color 0.35s ease';
+      img.style.transform = 'translate(0,0) scale(1)';
+      el.style.backgroundColor = 'rgba(0,0,0,0.7)';
+      img.addEventListener('transitionend', done, { once: true });
+    });
+  });
+};
+
+const onLeave = (el, done) => {
+  const thumbRect = thumbRef.value.getBoundingClientRect();
+  const img = el.querySelector('.modal-img');
+  const imgRect = img.getBoundingClientRect();
+
+  const scale = thumbRect.width / imgRect.width;
+  const dx = thumbRect.left + thumbRect.width / 2 - (imgRect.left + imgRect.width / 2);
+  const dy = thumbRect.top + thumbRect.height / 2 - (imgRect.top + imgRect.height / 2);
+
+  img.style.transition = 'transform 0.3s ease';
+  el.style.transition = 'background-color 0.3s ease';
+  img.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+  img.style.transformOrigin = 'center';
+  el.style.backgroundColor = 'rgba(0,0,0,0)';
+  img.addEventListener('transitionend', done, { once: true });
+};
 
 // Extrae y reacciona a los cambios en las descripciones
 const descriptionText = computed(() => {
@@ -45,8 +89,16 @@ const pokemonAbilities = computed(() => {
     <div class="main-container">
         <div class="left-section">
             <div>
-                <img :src="pokemonStore.pokemonDetails.image" :alt="pokemonStore.pokemonDetails.name" class="pokemon-image">
+                <img ref="thumbRef" :src="pokemonStore.pokemonDetails.image" :alt="pokemonStore.pokemonDetails.name" class="pokemon-image" @click="showModal = true">
             </div>
+
+            <Teleport to="body">
+                <Transition :css="false" @enter="onEnter" @leave="onLeave">
+                    <div v-if="showModal" class="modal-overlay" @click="showModal = false">
+                        <img :src="pokemonStore.pokemonDetails.image" :alt="pokemonStore.pokemonDetails.name" class="modal-img" @click.stop />
+                    </div>
+                </Transition>
+            </Teleport>
 
             <StatsChart class="chart-section" />
         </div>
@@ -143,7 +195,30 @@ const pokemonAbilities = computed(() => {
     background-color: #F2F2F2;
     border-radius: 5px;
     width: 100%;
+    cursor: pointer;
 }
+
+.modal-overlay{
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.modal-img{
+    max-width: 800px;
+    width: 80vw;
+    max-height: 80vh;
+    object-fit: contain;
+    background-color: #F2F2F2;
+    border-radius: 10px;
+    cursor: default;
+}
+
 
 .versions{
     display: flex;
