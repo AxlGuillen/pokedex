@@ -18,6 +18,30 @@ const goToHome = () => {
   router.push({ name: 'Home'});
 }
 
+const ripple = (event) => {
+  const btn = event.currentTarget;
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height) * 2;
+  const circle = document.createElement('span');
+  circle.style.cssText = `
+    position: absolute;
+    border-radius: 50%;
+    width: ${size}px;
+    height: ${size}px;
+    left: ${event.clientX - rect.left - size / 2}px;
+    top: ${event.clientY - rect.top - size / 2}px;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.3);
+  `;
+  btn.querySelector('[data-ripple]')?.remove();
+  circle.dataset.ripple = '';
+  btn.appendChild(circle);
+  circle.animate(
+    [{ transform: 'scale(0)', opacity: 1 }, { transform: 'scale(1)', opacity: 0 }],
+    { duration: 600, easing: 'linear', fill: 'forwards' }
+  ).onfinish = () => circle.remove();
+};
+
 const pokemonsEvolutions = computed(() => {
   return pokemonStore.pokemonEvolution;
 });
@@ -42,7 +66,7 @@ const pokemonsEvolutions = computed(() => {
             </div>
         </div>
         <div class="btn-container">
-            <button  @click="goToHome" class="back-pokedex">
+            <button @click="goToHome" @mouseenter="ripple" class="back-pokedex">
                 Back to Pokédex
             </button>
         </div>
@@ -149,7 +173,10 @@ const pokemonsEvolutions = computed(() => {
     color: #fff;
     font-size: large;
     font-weight: bolder;
+    position: relative;
+    overflow: hidden;
 }
+
 
 .back-pokedex:hover {
   background-color: #da471b;

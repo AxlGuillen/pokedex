@@ -19,6 +19,31 @@ const loadMorePokemons = () => {
   limitPokemons.value += 12;
 };
 
+const ripple = (event) => {
+  const btn = event.currentTarget;
+  if (btn.disabled) return;
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height) * 2;
+  const circle = document.createElement('span');
+  circle.style.cssText = `
+    position: absolute;
+    border-radius: 50%;
+    width: ${size}px;
+    height: ${size}px;
+    left: ${event.clientX - rect.left - size / 2}px;
+    top: ${event.clientY - rect.top - size / 2}px;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.3);
+  `;
+  btn.querySelector('[data-ripple]')?.remove();
+  circle.dataset.ripple = '';
+  btn.appendChild(circle);
+  circle.animate(
+    [{ transform: 'scale(0)', opacity: 1 }, { transform: 'scale(1)', opacity: 0 }],
+    { duration: 600, easing: 'linear', fill: 'forwards' }
+  ).onfinish = () => circle.remove();
+};
+
 // Resetear el límite al cambiar el orden para no renderizar cientos de cards de golpe
 watch(() => pokemonStore.pokemons, () => {
   limitPokemons.value = 12;
@@ -30,9 +55,10 @@ watch(() => pokemonStore.pokemons, () => {
       <PokemonCard v-for="pokemon in limitedPokemons" :key="pokemon.id" :pokemon="pokemon" />
     </div>
     <div class="btn-container">
-        <button @click="loadMorePokemons" 
-                :disabled="isLoadMoreDisabled" 
-                :class="{ 'disabled-btn': isLoadMoreDisabled }" 
+        <button @click="loadMorePokemons"
+                @mouseenter="ripple"
+                :disabled="isLoadMoreDisabled"
+                :class="{ 'disabled-btn': isLoadMoreDisabled }"
                 class="btn-surprise">
             Load more Pokémons
         </button>
@@ -62,7 +88,10 @@ watch(() => pokemonStore.pokemons, () => {
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
 }
+
 
 .btn-surprise:hover{
     background-color: #1B82B1;

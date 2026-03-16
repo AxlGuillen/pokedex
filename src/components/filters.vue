@@ -28,12 +28,36 @@ const handleRandomPokemons = () => {
     pokemonStore.resetAndShufflePokemons();
 };
 
+const ripple = (event) => {
+  const btn = event.currentTarget;
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height) * 2;
+  const circle = document.createElement('span');
+  circle.style.cssText = `
+    position: absolute;
+    border-radius: 50%;
+    width: ${size}px;
+    height: ${size}px;
+    left: ${event.clientX - rect.left - size / 2}px;
+    top: ${event.clientY - rect.top - size / 2}px;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.3);
+  `;
+  btn.querySelector('[data-ripple]')?.remove();
+  circle.dataset.ripple = '';
+  btn.appendChild(circle);
+  circle.animate(
+    [{ transform: 'scale(0)', opacity: 1 }, { transform: 'scale(1)', opacity: 0 }],
+    { duration: 600, easing: 'linear', fill: 'forwards' }
+  ).onfinish = () => circle.remove();
+};
+
 </script>
 
 <template>
     <div class="main-container">
         <div class="container">
-            <button class="btn-surprise" @click="handleRandomPokemons">
+            <button class="btn-surprise" @click="handleRandomPokemons" @mouseenter="ripple">
                 <img src="../assets/refresh.png" alt="icon" class="icon" />
                 Surprise Me!
             </button>
@@ -77,7 +101,10 @@ const handleRandomPokemons = () => {
     justify-content: center;
     gap: 10px;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
 }
+
 
 .btn-surprise:hover{
     background-color: #1B82B1;

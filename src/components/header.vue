@@ -12,6 +12,30 @@ const handleSearchPokemon = () => {
     pokemonStore.searchPokemonByNameOrId(pokemonToSearch.value);
     pokemonToSearch.value = '';
 }
+
+const ripple = (event) => {
+  const btn = event.currentTarget;
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height) * 2;
+  const circle = document.createElement('span');
+  circle.style.cssText = `
+    position: absolute;
+    border-radius: 50%;
+    width: ${size}px;
+    height: ${size}px;
+    left: ${event.clientX - rect.left - size / 2}px;
+    top: ${event.clientY - rect.top - size / 2}px;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.3);
+  `;
+  btn.querySelector('[data-ripple]')?.remove();
+  circle.dataset.ripple = '';
+  btn.appendChild(circle);
+  circle.animate(
+    [{ transform: 'scale(0)', opacity: 1 }, { transform: 'scale(1)', opacity: 0 }],
+    { duration: 600, easing: 'linear', fill: 'forwards' }
+  ).onfinish = () => circle.remove();
+};
 </script>
 
 <template>
@@ -21,7 +45,7 @@ const handleSearchPokemon = () => {
                <h2>Name or Number</h2>
                <div class="search-container">
                     <input v-model="pokemonToSearch" @keydown.enter="handleSearchPokemon" type="text" class="input-search">          
-                    <button  @click="handleSearchPokemon" class="button-search">
+                    <button @click="handleSearchPokemon" @mouseenter="ripple" class="button-search">
                         <SearchIcon />
                     </button>
                </div>
@@ -105,7 +129,10 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
 }
+
 
 .button-search:hover {
   background-color: #da471b;

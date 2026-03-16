@@ -28,16 +28,40 @@ const goToNext = () => {
 };
 
 const capitalizeName = (name) => name ? capitalize(name) : 'Unknown';
+
+const ripple = (event) => {
+  const btn = event.currentTarget;
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height) * 2;
+  const circle = document.createElement('span');
+  circle.style.cssText = `
+    position: absolute;
+    border-radius: 50%;
+    width: ${size}px;
+    height: ${size}px;
+    left: ${event.clientX - rect.left - size / 2}px;
+    top: ${event.clientY - rect.top - size / 2}px;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.3);
+  `;
+  btn.querySelector('[data-ripple]')?.remove();
+  circle.dataset.ripple = '';
+  btn.appendChild(circle);
+  circle.animate(
+    [{ transform: 'scale(0)', opacity: 1 }, { transform: 'scale(1)', opacity: 0 }],
+    { duration: 600, easing: 'linear', fill: 'forwards' }
+  ).onfinish = () => circle.remove();
+};
 </script>
 
 <template>
     <div class="header-container">
-        <div class="left" @click="goToPrevious">
+        <div class="left" @click="goToPrevious" @mouseenter="ripple">
             <AngleLeft />
             <span class="number">N.° {{ formatNumber(previousPokemon.id) || '---' }}</span>
             <span class="name">{{ capitalizeName(previousPokemon.name) || 'Unknown' }}</span>
         </div>
-        <div class="rigth" @click="goToNext">
+        <div class="rigth" @click="goToNext" @mouseenter="ripple">
             <span class="name">{{ capitalizeName(nextPokemon.name) || 'Unknown' }}</span>
             <span class="number">N.° {{ formatNumber(nextPokemon.id) || '---' }}</span>
             <AngleRight />
@@ -69,6 +93,8 @@ const capitalizeName = (name) => name ? capitalize(name) : 'Unknown';
     padding-top: 20px;
     font-weight: bold;
     font-size: 1.5rem;
+    position: relative;
+    overflow: hidden;
 }
 
 .left:hover{
@@ -87,6 +113,8 @@ const capitalizeName = (name) => name ? capitalize(name) : 'Unknown';
     padding-top: 20px;
     font-weight: bold;
     font-size: 1.5rem;
+    position: relative;
+    overflow: hidden;
 }
 
 .rigth:hover{
@@ -111,6 +139,7 @@ const capitalizeName = (name) => name ? capitalize(name) : 'Unknown';
 .id-name{
     color: #616161;
 }
+
 
 @media (max-width: 768px) {
   
